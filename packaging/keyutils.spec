@@ -6,6 +6,7 @@ Group:          System/Kernel
 Version:        1.5.3
 Release:        0
 Source0:        http://people.redhat.com/~dhowells/keyutils/%name-%version.tar.bz2
+Source1001: 	keyutils.manifest
 
 %description
 Utilities to control the kernel key management facility and to provide
@@ -31,6 +32,7 @@ This package provides headers and libraries for building key utilities.
 
 %prep
 %setup -q
+cp %{SOURCE1001} .
 
 %build
 make %{?_smp_mflags} NO_ARLIB=1 CFLAGS="$RPM_OPT_FLAGS" CC="%__cc"
@@ -43,6 +45,7 @@ make install NO_ARLIB=1 DESTDIR=$RPM_BUILD_ROOT LIBDIR=/%_lib USRLIBDIR=/usr/%_l
 %postun -n libkeyutils -p /sbin/ldconfig
 
 %files
+%manifest %{name}.manifest
 %defattr(-,root,root,-)
 %license LICENCE.GPL
 /sbin/*
@@ -52,11 +55,13 @@ make install NO_ARLIB=1 DESTDIR=$RPM_BUILD_ROOT LIBDIR=/%_lib USRLIBDIR=/usr/%_l
 %config(noreplace) /etc/*
 
 %files -n libkeyutils
+%manifest %{name}.manifest
 %defattr(-,root,root,-)
 %license LICENCE.LGPL
 /%{_lib}/libkeyutils.so.*
 
 %files devel
+%manifest %{name}.manifest
 %defattr(-,root,root,-)
 /usr/%{_lib}/libkeyutils.so
 %{_includedir}/*
